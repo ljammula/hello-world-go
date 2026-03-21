@@ -3,18 +3,22 @@ package main
 import (
     "flag"
     "fmt"
+    "os"
 )
+
+var greetings = map[string]string{
+    "en": "Hello, World!",
+    "te": "హలో వరల్డ్!",
+}
 
 func main() {
     lang := flag.String("lang", "en", "Language for greeting: en or te")
     flag.Parse()
 
-    switch *lang {
-    case "en":
-        fmt.Println("Hello, World!")
-    case "te":
-        fmt.Println("హలో వరల్డ్!") // Telugu: "Hello World!"
-    default:
-        fmt.Println("Unsupported language. Use 'en' or 'te'.")
+    if greet, ok := greetings[*lang]; ok {
+        fmt.Println(greet)
+    } else {
+        fmt.Fprintln(os.Stderr, "Unsupported language. Use 'en' or 'te'.")
+        os.Exit(1)
     }
 }
