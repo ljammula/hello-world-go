@@ -30,13 +30,25 @@ func TestHelloWorldTelugu(t *testing.T) {
     }
 }
 
+func TestHelloWorldHindi(t *testing.T) {
+    out, err := exec.Command("go", "run", "../main.go", "-lang=hi").CombinedOutput()
+    if err != nil {
+        t.Fatalf("Run failed: %v", err)
+    }
+    output := strings.TrimSpace(string(out))
+    want := "नमस्ते दुनिया!"
+    if output != want {
+        t.Errorf("Got %q, want %q", output, want)
+    }
+}
+
 func TestHelloWorldInvalidLang(t *testing.T) {
     out, err := exec.Command("go", "run", "../main.go", "-lang=fr").CombinedOutput()
     if err == nil {
         t.Fatalf("Run should fail for unsupported language")
     }
     output := strings.TrimSpace(string(out))
-    want := "Unsupported language. Use 'en' or 'te'."
+    want := "Unsupported language. Use 'en', 'te', or 'hi'."
     if !strings.Contains(output, want) {
         t.Errorf("Got %q, want %q", output, want)
     }
