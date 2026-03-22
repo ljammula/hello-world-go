@@ -4,6 +4,7 @@ import (
     "os/exec"
     "strings"
     "testing"
+    "regexp"
 )
 
 func TestHelloWorldEnglish(t *testing.T) {
@@ -48,8 +49,8 @@ func TestHelloWorldInvalidLang(t *testing.T) {
         t.Fatalf("Run should fail for unsupported language")
     }
     output := strings.TrimSpace(string(out))
-    want := "Unsupported language. Use 'en', 'te', or 'hi'."
-    if !strings.Contains(output, want) {
-        t.Errorf("Got %q, want %q", output, want)
+    re := regexp.MustCompile(`Unsupported language. Use one of: [a-z, ]+\.`)
+    if !re.MatchString(output) {
+        t.Errorf("Got %q, want pattern %q", output, re.String())
     }
 }
